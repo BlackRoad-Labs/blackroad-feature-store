@@ -95,6 +95,61 @@ python feature_store.py list-features --entity-type user
 python feature_store.py list-groups
 ```
 
+## Ollama Router
+
+Route prompts to a locally-running [Ollama](https://ollama.com) server using `@mention` triggers.
+No external AI provider (Copilot, ChatGPT, Claude, etc.) is involved — all traffic goes directly to your hardware.
+
+**Supported triggers** (case-insensitive): `@ollama`, `@copilot`, `@lucidia`, `@blackboxprogramming`
+
+### Quick start
+
+Start Ollama on your machine:
+
+```bash
+ollama serve          # defaults to http://localhost:11434
+ollama pull llama3    # or whichever model you prefer
+```
+
+Use the CLI:
+
+```bash
+python ollama_router.py "@ollama what is a feature store?"
+python ollama_router.py "@copilot explain point-in-time joins"
+python ollama_router.py "@lucidia write a Python hello world"
+python ollama_router.py "@blackboxprogramming refactor this function"
+```
+
+Override the server URL or model:
+
+```bash
+python ollama_router.py "@ollama hello" --base-url http://192.168.1.10:11434 --model mistral
+```
+
+Environment variables:
+
+| Variable | Default | Description |
+|---|---|---|
+| `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server URL |
+| `OLLAMA_MODEL` | `llama3` | Default model name |
+
+### Python API
+
+```python
+from ollama_router import route, detect_trigger
+
+# Detect a trigger without sending a request
+trigger = detect_trigger("@copilot explain recursion")  # → "@copilot"
+
+# Route automatically — sends to Ollama only when a trigger is present
+result = route("@ollama what is a feature store?")
+print(result["response"]["response"])
+
+# No trigger → nothing is sent
+result = route("plain text, no mention")
+# result == {"routed": False, "trigger": None, "response": None}
+```
+
 ## Tests
 
 ```bash
