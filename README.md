@@ -1,5 +1,13 @@
 # blackroad-feature-store
 
+> ML feature store with versioning and serving
+
+Part of the [BlackRoad OS](https://blackroad.io) ecosystem — [BlackRoad-Labs](https://github.com/BlackRoad-Labs)
+
+---
+
+# blackroad-feature-store
+
 > ML feature store with versioning and point-in-time serving
 
 Register feature definitions, group them by entity, write feature values, and retrieve them with full point-in-time correctness for training data generation.
